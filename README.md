@@ -1,4 +1,4 @@
-# 🔐 Sistema de Backup Remoto Seguro via Sockets (C)
+# 🔐 Sistema de Backup Remoto Seguro via Sockets 
 
 Este projeto implementa um **sistema de backup remoto cliente-servidor**, desenvolvido em **linguagem C**, utilizando **sockets**, **TLS (OpenSSL)** e **controle de cotas por usuário**.  
 O objetivo é demonstrar conceitos fundamentais de **redes de computadores**, **segurança**, **comunicação criptografada** e **gerenciamento de arquivos**.
