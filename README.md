@@ -1,59 +1,62 @@
-# Sistema de Backup Remoto Cliente-Servidor via Sockets
+# 🔐 Sistema de Backup Remoto Seguro via Sockets (C)
 
-## 📌 Descrição
-Este projeto consiste na implementação de um **Sistema de Backup Remoto Cliente-Servidor**, desenvolvido como trabalho final da disciplina de Redes. O sistema permite que clientes realizem operações de **criação/atualização de backup** e **restauração de arquivos** armazenados em um servidor remoto, utilizando exclusivamente **comunicação via sockets**.
-
-A comunicação entre cliente e servidor ocorre por meio de **sockets TCP**, com **criptografia na comunicação** e **autenticação de usuários**, garantindo a confidencialidade e a segurança dos dados transmitidos.
+Este projeto implementa um **sistema de backup remoto cliente-servidor**, desenvolvido em **linguagem C**, utilizando **sockets**, **TLS (OpenSSL)** e **controle de cotas por usuário**.  
+O objetivo é demonstrar conceitos fundamentais de **redes de computadores**, **segurança**, **comunicação criptografada** e **gerenciamento de arquivos**.
 
 ---
 
-## 🎯 Objetivos
-- Implementar comunicação cliente-servidor utilizando sockets
-- Permitir operações de backup e restauração de arquivos
-- Aplicar autenticação de usuários
-- Garantir criptografia na comunicação
-- Consolidar conceitos fundamentais de programação em redes
+## 📌 Funcionalidades
+
+- 🔐 Comunicação segura com **TLS (OpenSSL)**
+- 🔑 Autenticação de usuários
+- 📦 Backup remoto de arquivos
+- 📂 Restore (recuperação) de arquivos
+- 📃 Listagem de arquivos disponíveis para restore
+- 🧮 Controle de cota de armazenamento por usuário
+- 🌐 Descoberta automática do servidor via **UDP**
+- 🗂️ Organização de arquivos por usuário no servidor
 
 ---
 
-## 🧱 Arquitetura
-O sistema é dividido em três principais módulos:
+## 🏗️ Arquitetura do Sistema
 
-- **Cliente**: responsável por autenticar o usuário e solicitar operações de backup ou restauração.
-- **Servidor**: gerencia usuários, arquivos armazenados e controle de cotas.
-- **Common**: contém definições do protocolo e funções compartilhadas, como criptografia.
+O sistema é dividido em dois módulos principais:
+
+### 🔹 Cliente
+- Descoberta automática do servidor via UDP
+- Conexão segura via TLS
+- Autenticação do usuário
+- Execução das operações:
+  - `backup <arquivo>`
+  - `restore <arquivo>`
+  - `list`
+
+### 🔹 Servidor
+- Escuta conexões TCP com TLS
+- Responde a broadcasts UDP
+- Autentica usuários
+- Gerencia armazenamento por usuário
+- Aplica regras de cota antes de permitir backup
 
 ---
 
 ## 🔐 Segurança
-- Autenticação obrigatória antes de qualquer operação
-- Comunicação criptografada (TLS)
-- Senhas armazenadas de forma segura (hash)
+
+Toda a comunicação entre cliente e servidor é **criptografada utilizando TLS**, por meio da biblioteca **OpenSSL**.
+
+- Usuário e senha não trafegam em texto puro
+- Arquivos são enviados de forma criptografada
+- Cada sessão TLS é associada a um usuário autenticado
+
+> Mesmo que o tráfego seja interceptado, o conteúdo permanece protegido.
 
 ---
 
-## 📡 Protocolo de Comunicação
-O protocolo de aplicação define mensagens de autenticação, backup e restauração, com envio de arquivos em blocos de dados. A documentação detalhada do protocolo encontra-se em `docs/protocolo.md`.
+## 🧮 Controle de Cotas
 
----
+O servidor utiliza um arquivo `quotas.txt` para definir o limite de armazenamento por usuário.
 
-## 🧪 Funcionalidades
-- Criar/atualizar backup
-- Restaurar backup
-- Autenticação de usuários
-- Controle de cota por usuário
-- (Opcional) Descoberta automática do servidor via broadcast UDP
-
----
-
-## 🛠️ Tecnologias Utilizadas
-- Linguagem C
-- Sockets TCP e UDP
-- OpenSSL (TLS)
-- Sistema Linux
-
----
-
-## 👨‍🎓 Autor
-- Gleydson Rodrigues Lins
-
+### 📄 Formato do arquivo `quotas.txt`
+```txt
+admin:5000000
+Gleydson:10000000
